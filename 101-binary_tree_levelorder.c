@@ -1,35 +1,59 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_levelorder - Traverses a binary tree using level-order traversal
+ * binary_tree_levelorder - Goes through a binary tree using level-order
  * @tree: Pointer to the root node of the tree to traverse
  * @func: Pointer to a function to call for each node
- *
- * Description: This function traverses the binary tree using level-order
- * traversal (also known as breadth-first traversal) and calls the given
- * function for each node visited. The function takes the value in the node
- * as a parameter.
  */
 
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
-	if (!tree || !func)
+	size_t h, i;
+
+	if (tree == NULL || func == NULL)
 		return;
 
-	binary_tree_t *queue[10000]; /* Assuming maximum 10000 nodes */
-	int front = 0, rear = 0;
+	h = binary_tree_height(tree) + 1;
+	for (i = 0; i < h; i++)
+		binary_tree_print_level(tree, func, i);
+}
 
-	queue[rear++] = (binary_tree_t *)tree;
+/**
+ * binary_tree_height - Measures the height of a binary tree
+ * @tree: Pointer to the root node of the tree to measure the height
+ * Return: The height of the tree
+ */
+size_t binary_tree_height(const binary_tree_t *tree)
+{
+	size_t left_height = 0, right_height = 0;
 
-	while (front < rear)
+	if (tree == NULL)
+		return (0);
+
+	left_height = binary_tree_height(tree->left);
+	right_height = binary_tree_height(tree->right);
+
+	return ((left_height > right_height ? left_height : right_height) + 1);
+}
+
+/**
+ * binary_tree_print_level - Prints a level of a binary tree
+ * @tree: Pointer to the node of the tree to print
+ * @func: Pointer to a function to call for each node
+ * @level: The level to print
+ */
+
+void binary_tree_print_level(const binary_tree_t *tree,
+		void (*func)(int), size_t level)
+{
+	if (tree == NULL)
+		return;
+
+	if (level == 0)
+		func(tree->n);
+	else if (level > 0)
 	{
-		binary_tree_t *current = queue[front++];
-
-		func(current->n);
-
-		if (current->left)
-			queue[rear++] = current->left;
-		if (current->right)
-			queue[rear++] = current->right;
+		binary_tree_print_level(tree->left, func, level - 1);
+		binary_tree_print_level(tree->right, func, level - 1);
 	}
 }
