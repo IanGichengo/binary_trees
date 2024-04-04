@@ -70,5 +70,7 @@ int heap_extract(heap_t **root);
 int *heap_to_sorted_array(heap_t *heap, size_t *size);
 binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
 		const binary_tree_t *second);
+void binary_tree_print_level(const binary_tree_t *tree,
+		void (*func)(int), size_t level);
 
 #endif
